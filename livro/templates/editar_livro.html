@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block 'conteudo' %} 
+<br>
+<div class="container">
+    <div class="row justify-content-center">
+        <br>
+        <h4><a href="{% url 'livros' %}" class="text-decoration-none">Livros\</a>{{livro.titulo}}</h3>
+
+    </div>
+
+    
+
+
+    <div class="row justify-content-center">
+        <form action="{% url 'editar_livro' livro.id %}" method="POST">
+            {% csrf_token %}         
+                            
+            <br>
+            <p>
+                <label>Título:</label>
+                <input style="width: 60%;" class="form-control" type="text" value="{{livro.titulo}}" name="titulo">
+            </p>
+
+            <p>
+                <label>Autor:</label>
+                <input style="width: 60%;" class="form-control" type="text" value="{{livro.autor}}" name="autor">
+            </p>
+
+            <p>
+                <label>Disponibilidade: &nbsp; &nbsp;</label>
+                <input class="form-check-input" style="transform: scale(1.5);" checked type="checkbox" name="disponibilidade">
+            </p>
+
+            <p>
+                <label>Ano de publicação:</label>
+                <input style="width: 60%;" class="form-control" type="year" value="{{livro.ano_de_publicacao}}" name="ano_de_publicacao">
+            </p>
+
+            <p>
+                <label>ISBN:</label>
+                <input style="width: 60%;" class="form-control" type="text" value="{{livro.ISBN}}" name="ISBN">
+            </p>
+
+            <p>
+                <label>Categoria:</label>
+                <select style="width: 20%;" class="form-select" name="categoria">
+                    {% for i in categorias %}
+                        {% if livro.categoria == i %}
+                            <option selected >{{ i.nome }}</option>
+                        {%endif%}
+                        <option >{{ i.nome }}</option>
+                                       
+                    {%endfor%}
+                
+                </select>
+            </p>
+
+
+            <br>
+
+            <div style="width: 60%;" class="modal-footer">
+                <input type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#excluirLivroModal" value="Excluir">
+                <input type="submit" class="btn btn-primary" value="Salvar">
+            </div>
+        
+        </form>
+
+    </div>
+</div>
+
+
+<!-- Excluir Livro Modal -->
+<div class="modal fade" id="excluirLivroModal" tabindex="-1" aria-labelledby="excluirLivroModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title" id="excluirLivroModalLabel">Excluir</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        Tem certeza que deseja excluir o livro <strong>{{livro.titulo}}</strong> ?
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+            <a href=" {% url 'excluir_livro' livro.id%}" class="btn btn-danger" role="button">Sim</a>
+        </div>
+    </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block 'navbar-dashboard' %} 
+"nav-link"
+{%endblock%}
+
+{% block 'navbar-livros' %} 
+"nav-link active"
+{%endblock%}

@@ -1,6 +1,123 @@
 {% extends 'base.html' %}
 
-{% block 'conteudo' %} 
-<h1> Pagina para visualizar e pesquisar os livros dispooniveis</h1>
+{% load static %}
+
+{% block 'alertas' %}
+
+{% for message in messages %}
+<div class="container-fluid p-0">
+    
+  <div class="{{ message.tags }}" role="alert" >
+    <strong>{{ message }}</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+      <span aria-hidden="True">&times;</span>
+    </button>
+    
+  </div>
+</div>
+{% endfor %}
 
 {% endblock %}
+
+{% block 'conteudo' %} 
+    <h1> Pagina para visualizar e pesquisar os livros dispooniveis</h1>
+
+    <div class="container">
+        <div></div>
+
+
+        <div class="row justify-content-center">
+            <form action="{% url 'livros' %}" method="POST" id = 'filtro_categoria'>
+                {% csrf_token %}
+
+                {{ filtro_categoria }}
+
+            </form>
+        </div>
+
+        <div class="row justify-content-center">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Cadastrar novo Livro
+            </button>
+            
+            <!-- Modal  Cadastro de Livro -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Cadastrar Livro</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{% url 'cadastro_livro' %}" method="POST">
+                            {% csrf_token %}
+                            <table>
+                                {{form.as_table}}
+                            </table>
+                        
+                        <div class="modal-footer">
+                            <input type="submit" class="btn btn-primary" value="Cadastrar">
+                        </div>
+                        </form>
+                    </div>
+                    
+                </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row justify-content-center">
+            <table class="table table-striped table-hover ms-sm-auto col-lg-10 px-md-4">
+                <thead class="table-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Título</th>
+                    <th scope="col">Autor(a)</th>
+                    <th scope="col" class="text-center">ISBN</th>
+                    <th scope="col">Ano</th>
+                    <th scope="col" class="text-center">Disponibilidade</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                {% for livro in livros%}             
+                <tbody>
+                <tr>
+                    <th scope="row">{{livro.id}}</th>
+                    <td>{{livro.titulo}}</td>
+                    <td>{{livro.autor}}</td>
+                    <td class="text-center">{{livro.ISBN}}</td>
+                    <td>{{livro.ano_de_publicacao}}</td>
+                    <td class="text-center">{% if livro.disponibilidade == True %}
+                        <i class="bi bi-check-lg link-success"></i>
+                        {% elif livro.disponibilidade == False%}
+                        <i class="bi bi-x link-danger"></i>
+                        {% endif %}
+                    </td>
+                    <td><a href="{% url 'editar_livro' livro.id %}" type="button" class="link-secondary border-0"><i class="bi bi-pencil-square"></i></a> 
+                        
+                    </td>
+                </tr>
+                </tbody>
+                {%endfor%}
+            </table>
+        </div>
+    </div>
+    
+
+{% endblock %}
+
+{% block 'navbar-dashboard' %} 
+"nav-link"
+{%endblock%}
+
+{% block 'navbar-livros' %} 
+"nav-link active"
+{%endblock%}
+
+
+
+
+
+
