@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.utils.datastructures import MultiValueDictKeyError
 from usuarios.models import Funcionariosdb
 from livro.models import Livrosdb, Categoriadb
-from .forms import LivroForm, FiltroCategoria
+from .forms import LivroForm, FiltroForm
 import datetime
 
 def manager(request):
@@ -18,24 +18,48 @@ def manager(request):
 def livros(request):
     if request.session.get('usuario'):
         temp ='0'
+        temp_disp = '0'
+        temp_order = '0'
         usuario = Funcionariosdb.objects.get(id=request.session['usuario'])
         form = LivroForm()
-        filtro_categoria = FiltroCategoria()
+        filtro = FiltroForm()
         livros = Livrosdb.objects.all()
         if request.method == "POST":
+            print(request.POST)
                         
             temp = request.POST['categoria']
+            temp_disp = request.POST['disponibilidade']
+            temp_order = request.POST['order']
+            filtro = FiltroForm(initial={'categoria':temp, 'disponibilidade':temp_disp, 'order':temp_order})
 
-            filtro_categoria = FiltroCategoria(initial={'categoria':temp})
+
+            # FILTRA CATEGORIA
             if temp == '0':
                 livros = Livrosdb.objects.all()
             else:
                 livros = Livrosdb.objects.filter(categoria_id = temp)
 
+            # FILTRA DISPONIBILIDADE
+            if temp_disp == '2':
+                livros = livros.filter(disponibilidade = False)
+            elif temp_disp == '1':
+                livros = livros.filter(disponibilidade = True)
             
-            print(temp)
+            # ORDENA OS OBJETOS
+            if temp_order == '0':
+                livros = livros.order_by("-data_cadastro","titulo")
+            elif temp_order == '1':
+                livros = livros.order_by("data_cadastro", "titulo")
+            elif temp_order == '2':
+                livros = livros.order_by("titulo")
+            elif temp_order == '3':
+                livros = livros.order_by("-titulo")
+            
+        contagem = len(livros)
+
+
         
-        return render(request, 'livros.html',{'livros':livros, 'form':form, 'filtro_categoria':filtro_categoria, 'temp':temp})
+        return render(request, 'livros.html',{'livros':livros, 'form':form, 'filtro':filtro, 'contagem':contagem})
     else:
         return redirect('/auth/login/?status=2')
 
@@ -47,18 +71,16 @@ def editar_livro(request, info):
         if request.method == 'POST':
             livro.titulo = request.POST['titulo']
             livro.autor = request.POST['autor']
-            # try:
-            #     if request.POST['disponibilidade'] == 'on':
-            #         livro.disponibilidade = True
-            #     else:
-            #         livro.disponibilidade = False
-            # except MultiValueDictKeyError():
-            #      livro.disponibilidade = False
-            print(request.POST['disponibilidade'])
-            # livro.disponibilidade = request.POST['disponibilidade']
+            try:
+                if request.POST['disponibilidade'] == 'on':
+                    livro.disponibilidade = True
+                else:
+                    livro.disponibilidade = False
+            except MultiValueDictKeyError:
+                 livro.disponibilidade = False
             livro.ano_de_publicacao = request.POST['ano_de_publicacao']
             livro.ISBN = request.POST['ISBN']
-            # livro.categoria = Categoriadb.objects.get(nome=request.POST['categoria'])         
+            livro.categoria = Categoriadb.objects.get(nome=request.POST['categoria'])         
             try:
                 messages.success(request, 'Livro editado com sucesso.')
                 livro.save()
