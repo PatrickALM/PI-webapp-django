@@ -26,7 +26,24 @@ No Linux
 source pi2-venv\Scripts\activate
 ~~~ 
 
-* Inicie o servidor web
+3. Atualize as configurações do banco de dados
+
+~~~
+python manage.py makemigrations
+~~~ 
+
+~~~
+python manage.py migrate
+~~~ 
+
+4. Crie o superusuário para conseguir acessar a pagina de administração do django e popular as tabelas com os dados
+
+~~~
+python manage.py createsuperuser 
+~~~ 
+
+
+5. Inicie o servidor web
 ~~~
 python manage.py runserver
 ~~~
