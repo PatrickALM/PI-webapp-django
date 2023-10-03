@@ -138,12 +138,7 @@ def emprestimos(request):
     else:
         return redirect('/auth/login/?status=2')
     
-def usuarios(request):
-    if request.session.get('usuario'):
-        usuario = Funcionariosdb.objects.get(id=request.session['usuario'])
-        return render(request, 'usuarios.html')
-    else:
-        return redirect('/auth/login/?status=2')
+
     
 
 def popula_tb_livros(request):
