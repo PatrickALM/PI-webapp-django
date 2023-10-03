@@ -112,7 +112,7 @@ def cadastro_livro(request):
     if request.session.get('usuario'):
         usuario = Funcionariosdb.objects.get(id=request.session['usuario'])
         if request.method == 'POST':
-            form = LivroForm(request.POST)
+            form = LivroForm(request.POST, request.FILES)
             if form.is_valid:
                 livro = Livrosdb(
                     titulo = form.data['titulo'],
