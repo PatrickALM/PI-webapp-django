@@ -12,4 +12,21 @@ Desenvolver um software com framework web que utilize banco de dados, inclua scr
 #### Instruções para rodar o protótipo 
 
 
+1. Acesse o diretório do repositório em seu computador
 
+2. Ative o ambiente virtual
+
+No Windows
+~~~
+pi2-venv\Scripts\activate.bat
+~~~
+
+No Linux
+~~~
+source pi2-venv\Scripts\activate
+~~~ 
+
+* Inicie o servidor web
+~~~
+python manage.py runserver
+~~~
