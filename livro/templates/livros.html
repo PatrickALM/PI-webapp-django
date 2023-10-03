@@ -44,7 +44,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="{% url 'cadastro_livro' %}" method="POST">
+                        <form action="{% url 'cadastro_livro' %}" method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
                             <table>
                                 {{form.as_table}}
@@ -161,11 +161,18 @@
         <div class="row justify-content-start align-items-start" id="exibeCards" >
             {% for livro in livros %}
               <div class="col-3 mb-3" >
+                
+              
 
                 <a type="button" class="btn btn-light" href="{% url 'editar_livro' livro.id %}">
                   <div class="card bg-light" style="width: 14rem; min-height: 25rem;">
                     <!-- <img src="data:;base64," class="card-img-top" style= "height: 14rem;"alt="..."> -->
-                    <img src = "{% static 'imgs/placeholder.png' %}" class="card-img-top" style= "height: 14rem;"alt="...">
+                {% if livro.img %}
+                    <img src = "{{ livro.img.url }}"
+                {% else %}  
+                    <img src = "{% static 'imgs/placeholder.png' %}" 
+                {% endif %}
+                    class="card-img-top" style= "height: 14rem;"alt="...">
                     <div class="card-body d-flex flex-column align-items-center">
                       <strong class="card-title text-dark border-bottom border-secondary">{{ livro.titulo }}</strong>
                       <p class="card-text"> {{ livro.autor }} - {{ livro.ano_de_publicacao }}</p>

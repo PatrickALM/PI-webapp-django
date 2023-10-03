@@ -12,6 +12,7 @@ class Categoriadb(models.Model):
         return self.nome
 
 class Livrosdb(models.Model):
+    img = models.ImageField(upload_to='capa_livro', null=True, blank=True)
     titulo = models.CharField(max_length=100)
     autor = models.CharField(max_length=50)
     disponibilidade = models.BooleanField(default=True)

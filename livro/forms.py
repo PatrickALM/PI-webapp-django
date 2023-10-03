@@ -35,7 +35,7 @@ ORDER_BY = [
 class LivroForm(forms.ModelForm):
     class Meta:
         model = Livrosdb
-        fields = ('titulo','autor','ISBN','ano_de_publicacao','categoria')
+        fields = ('titulo','autor','ISBN','ano_de_publicacao','categoria','img')
 
     
     def __init__(self, *args, **kwargs):
