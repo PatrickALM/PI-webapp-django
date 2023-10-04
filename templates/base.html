@@ -89,7 +89,18 @@
     
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
           
-          {% block 'alertas' %} {%endblock%}
+          {% for message in messages %}
+            <div class="container-fluid p-0">
+                
+              <div class="{{ message.tags }}" role="alert" >
+                <strong>{{ message }}</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="True">&times;</span>
+                </button>
+                
+              </div>
+            </div>
+          {% endfor %}
           
           {% block 'conteudo' %} {%endblock%}
               

@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block 'conteudo' %} 
+<br>
+<div class="container">
+    <div class="row justify-content-center">
+        <br>
+        <h4><a href="{% url 'usuarios' %}" class="text-decoration-none">Usuários\</a>{{dados_usuario.nome}}</h3>
+
+    </div>
+
+    
+
+
+    <div class="row justify-content-center">
+        <form action="{% url 'editar_usuario' dados_usuario.id %}" method="POST">
+            {% csrf_token %}         
+                            
+            <br>
+            <p>
+                <label>Nome:</label>
+                <input style="width: 60%;" class="form-control" type="text" value="{{dados_usuario.nome}}" name="nome">
+            </p>
+
+            <p>
+                <label>Sobrenome:</label>
+                <input style="width: 60%;" class="form-control" type="text" value="{{dados_usuario.sobrenome}}" name="sobrenome">
+            </p>
+
+            <p>
+                <label>Endereço: &nbsp; &nbsp;</label>
+                <input style="width: 60%;" class="form-control" type="text" value="{{dados_usuario.endereco}}" name="endereco">
+            </p>
+
+            <p>
+                <label>Telefone:</label>
+                <input style="width: 60%;" class="form-control" type="year" value="{{dados_usuario.telefone}}" name="telefone">
+            </p>
+
+            <p>
+                <label>Matrícula:</label>
+                <input style="width: 60%;" class="form-control" type="text" value="{{dados_usuario.matricula}}" name="matricula">
+            </p>
+
+            
+            <br>
+
+            <div style="width: 60%;" class="modal-footer">
+                <input type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#excluirUsuarioModal" value="Excluir">
+                <input type="submit" class="btn btn-primary" value="Salvar">
+            </div>
+        
+        </form>
+
+    </div>
+</div>
+
+
+<!-- Excluir Usuário Modal -->
+<div class="modal fade" id="excluirUsuarioModal" tabindex="-1" aria-labelledby="excluirUsuarioModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title" id="excluirUsuarioModalLabel">Excluir</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        Tem certeza que deseja excluir o cadastro do usuário <strong>{{dados_usuario.nome}}</strong> ?
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+            <a href=" {% url 'excluir_usuario' dados_usuario.id%}" class="btn btn-danger" role="button">Sim</a>
+        </div>
+    </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block 'navbar-dashboard' %} 
+"nav-link text-light navbar-brand"
+{%endblock%}
+
+{% block 'navbar-usuario' %} 
+"nav-link active navbar-brand"
+{%endblock%}

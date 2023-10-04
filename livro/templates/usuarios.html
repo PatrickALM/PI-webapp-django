@@ -10,13 +10,13 @@
         <div class="row justify-content-center">
 
 
-            <!-- Botão que ativa a Modal de cadastro de livros-->
+            <!-- Botão que ativa a Modal de cadastro de usuarios-->
             <button type="button" style="max-width: 98%;" class=" shadow btn btn-primary btn-lg mb-4" data-bs-toggle="modal" data-bs-target="#cadastroUsuarioModal">
                 Cadastrar Usuário
             </button>
             
             
-            <!-- Modal  Cadastro de Livro -->
+            <!-- Modal  Cadastro de Usuario -->
             <div class="modal fade" id="cadastroUsuarioModal" tabindex="-1" aria-labelledby="cadastroUsuarioModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                 <div class="modal-content">
@@ -64,7 +64,7 @@
                     <td>{{i.endereco}}</td>
                     <td class="text-center">{{i.telefone}}</td>
                     <td class="text-center">{{i.matricula}}</td>
-                    <td><a href="#" type="button" class="link-secondary border-0"><i class="bi bi-pencil-square"></i></a> 
+                    <td><a href="{% url 'editar_usuario' i.id %}" type="button" class="link-secondary border-0"><i class="bi bi-pencil-square"></i></a> 
                         
                     </td>
                 </tr>

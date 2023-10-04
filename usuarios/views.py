@@ -66,3 +66,42 @@ def cadastro_usuario(request):
                 return redirect('/auth/usuarios/')
     else:
         return redirect('/auth/login/?status=2')
+    
+
+def editar_usuario(request, info):
+    if request.session.get('usuario'):
+        usuario = Funcionariosdb.objects.get(id=request.session['usuario'])
+        dados_usuario = Usuariosdb.objects.get(id=info)
+        
+        if request.method == 'POST':
+            dados_usuario.nome = request.POST['nome']
+            dados_usuario.sobrenome = request.POST['sobrenome']
+            dados_usuario.endereco = request.POST['endereco']
+            dados_usuario.telefone = request.POST['telefone']
+            dados_usuario.matricula = request.POST['matricula']
+                   
+            try:
+                dados_usuario.save()
+                messages.success(request, 'Cadastro de usuario editado com sucesso.')
+                return redirect('/auth/usuarios/')
+            except:
+                messages.ERROR(request, 'Houve um erro inesperado ao editar o cadastro de usuario')
+                return redirect('/auth/usuarios/')
+        
+        return render(request, 'editar_usuario.html',{'dados_usuario':dados_usuario})
+    else:
+        return redirect('/auth/login/?status=2')
+
+def excluir_usuario(request, info):
+    if request.session.get('usuario'):
+        usuario = Funcionariosdb.objects.get(id=request.session['usuario'])
+        try:
+            Usuariosdb.objects.get(id=info).delete()
+            messages.success(request, 'Cadastro de usuario excluido com sucesso.')
+            return redirect('/auth/usuarios/')
+        except:
+            messages.ERROR(request, 'Houve um erro inesperado ao excluir o cadastro de usuario')
+            return redirect('/auth/usuarios/')
+        
+    else:
+        return redirect('/auth/login/?status=2')
