@@ -77,10 +77,15 @@ def editar_livro(request, info):
                 else:
                     livro.disponibilidade = False
             except MultiValueDictKeyError:
-                 livro.disponibilidade = False
+                livro.disponibilidade = False
             livro.ano_de_publicacao = request.POST['ano_de_publicacao']
             livro.ISBN = request.POST['ISBN']
-            livro.categoria = Categoriadb.objects.get(nome=request.POST['categoria'])         
+            livro.categoria = Categoriadb.objects.get(nome=request.POST['categoria']) 
+
+            if (request.FILES.get('imagem')==None and livro.img != "" ):
+                livro.img = livro.img
+            else:
+                livro.img = request.FILES.get('imagem')    
             try:
                 messages.success(request, 'Livro editado com sucesso.')
                 livro.save()
