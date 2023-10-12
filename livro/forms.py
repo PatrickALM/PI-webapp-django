@@ -1,5 +1,5 @@
 from django import forms
-from .models import Livrosdb
+from .models import Livrosdb, Emprestimosdb
 
 CATEGORIA_FILTRO =[
     ("0", "Todas"),
@@ -43,6 +43,20 @@ class LivroForm(forms.ModelForm):
         super(LivroForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control my-2 ms-2'
+
+class EmprestimoForm(forms.ModelForm):
+    class Meta:
+        model = Emprestimosdb
+        fields = ('id_livro','id_usuario','data_saida','data_retorno_previsto')
+
+    
+    def __init__(self, *args, **kwargs):
+        super(EmprestimoForm, self).__init__(*args, **kwargs)
+        
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control my-2 ms-2'
+
+
 
 class FiltroForm(forms.Form):
     categoria = forms.ChoiceField(choices=CATEGORIA_FILTRO,widget=forms.Select(attrs={'onchange': 'filtro.submit();'}))

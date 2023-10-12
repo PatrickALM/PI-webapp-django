@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
 from django.utils.datastructures import MultiValueDictKeyError
-from usuarios.models import Funcionariosdb
-from livro.models import Livrosdb, Categoriadb
-from .forms import LivroForm, FiltroForm
+from usuarios.models import Funcionariosdb, Usuariosdb
+from livro.models import Livrosdb, Categoriadb , Emprestimosdb
+from .forms import LivroForm, FiltroForm,EmprestimoForm
 import datetime
 
 def manager(request):
@@ -25,8 +25,7 @@ def livros(request):
         filtro = FiltroForm()
         livros = Livrosdb.objects.all()
         if request.method == "POST":
-            print(request.POST)
-                        
+                                   
             temp = request.POST['categoria']
             temp_disp = request.POST['disponibilidade']
             temp_order = request.POST['order']
@@ -134,9 +133,37 @@ def cadastro_livro(request):
 def emprestimos(request):
     if request.session.get('usuario'):
         usuario = Funcionariosdb.objects.get(id=request.session['usuario'])
-        return render(request, 'emprestimos.html')
+        historico = Emprestimosdb.objects.all()
+        form = EmprestimoForm()
+        if request.method == "POST":
+            pass
+
+        return render(request, 'emprestimos.html',{'historico':historico,'form':form})
     else:
         return redirect('/auth/login/?status=2')
+    
+
+
+def cadastro_emprestimo(request):
+    if request.session.get('usuario'):
+        usuario = Funcionariosdb.objects.get(id=request.session['usuario'])
+        form = EmprestimoForm(request.POST)
+        if request.method == "POST":
+            if form.is_valid:
+                print(Funcionariosdb.objects.get(id=request.session['usuario']))
+                emprestimo = Emprestimosdb(
+                    id_livro = Livrosdb.objects.get(id=int(form.data['id_livro'])),
+                    id_usuario = Usuariosdb.objects.get(id=int(form.data['id_usuario'])),
+                    data_retorno_previsto = form.data['data_retorno_previsto'])
+                form.save(emprestimo)
+                messages.success(request, 'Emprestimo cadastrado com sucesso.')
+                return redirect('/livro/emprestimos/')
+            else:
+                messages.ERROR(request, 'Falha ao cadastrar emprestimo. Verifique as informações e tente novamente.')
+                return redirect('/livro/emprestimos/')
+    else:
+        return redirect('/auth/login/?status=2')
+
     
 
     
