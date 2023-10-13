@@ -1,72 +1,91 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block 'conteudo' %} 
 <br>
 <div class="container">
-    <div class="row justify-content-center">
-        <br>
-        <h4><a href="{% url 'livros' %}" class="text-decoration-none">Livros\</a>{{livro.titulo}}</h3>
+    <div class="row">
 
-    </div>
+        <div class="col-3">
+            <div class="row justify-content-center">
+                <br>
+                <!-- <h4><a href="{% url 'livros' %}" class="text-decoration-none">Voltar</a>{{livro.titulo}}</h3> -->
+                {% if livro.img %}
+                    <img src = "{{ livro.img.url }}" class="img-book-edit">
+                {% else %}  
+                    <img src = "{% static 'imgs/placeholder.png' %}"  class="img-book-edit">
+                {% endif %}
 
-    
-
-
-    <div class="row justify-content-center">
-        <form action="{% url 'editar_livro' livro.id %}" method="POST">
-            {% csrf_token %}         
-                            
-            <br>
-            <p>
-                <label>Título:</label>
-                <input style="width: 60%;" class="form-control" type="text" value="{{livro.titulo}}" name="titulo">
-            </p>
-
-            <p>
-                <label>Autor:</label>
-                <input style="width: 60%;" class="form-control" type="text" value="{{livro.autor}}" name="autor">
-            </p>
-
-            <p>
-                <label>Disponibilidade: &nbsp; &nbsp;</label>
-                <input class="form-check-input" style="transform: scale(1.5);" checked type="checkbox" name="disponibilidade">
-            </p>
-
-            <p>
-                <label>Ano de publicação:</label>
-                <input style="width: 60%;" class="form-control" type="year" value="{{livro.ano_de_publicacao}}" name="ano_de_publicacao">
-            </p>
-
-            <p>
-                <label>ISBN:</label>
-                <input style="width: 60%;" class="form-control" type="text" value="{{livro.ISBN}}" name="ISBN">
-            </p>
-
-            <p>
-                <label>Categoria:</label>
-                <select style="width: 20%;" class="form-select" name="categoria">
-                    {% for i in categorias %}
-                        {% if livro.categoria == i %}
-                            <option selected >{{ i.nome }}</option>
-                        {%endif%}
-                        <option >{{ i.nome }}</option>
-                                       
-                    {%endfor%}
-                
-                </select>
-            </p>
-
-
-            <br>
-
-            <div style="width: 60%;" class="modal-footer">
-                <input type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#excluirLivroModal" value="Excluir">
-                <input type="submit" class="btn btn-primary" value="Salvar">
             </div>
+        </div>    
         
-        </form>
 
-    </div>
+        <div class="col-6">
+            <div class="row justify-content-center">
+                
+                <form action="{% url 'editar_livro' livro.id %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}         
+                                    
+                    <br>
+                    <p>
+                        <label>Título:</label>
+                        <input style="width: 60%;" class="form-control" type="text" value="{{livro.titulo}}" name="titulo">
+                    </p>
+
+                    <p>
+                        <label>Autor:</label>
+                        <input style="width: 60%;" class="form-control" type="text" value="{{livro.autor}}" name="autor">
+                    </p>
+
+                    <p>
+                        <label>Disponibilidade: &nbsp; &nbsp;</label>
+                        <input class="form-check-input" style="transform: scale(1.5);" checked type="checkbox" name="disponibilidade">
+                    </p>
+
+                    <p>
+                        <label>Ano de publicação:</label>
+                        <input style="width: 60%;" class="form-control" type="year" value="{{livro.ano_de_publicacao}}" name="ano_de_publicacao">
+                    </p>
+
+                    <p>
+                        <label>ISBN:</label>
+                        <input style="width: 60%;" class="form-control" type="text" value="{{livro.ISBN}}" name="ISBN">
+                    </p>
+
+                    <p>
+                        <label>Categoria:</label>
+                        <select style="width: 20%;" class="form-select" name="categoria">
+                            {% for i in categorias %}
+                                {% if livro.categoria == i %}
+                                    <option selected >{{ i.nome }}</option>
+                                {%endif%}
+                                <option >{{ i.nome }}</option>
+                                            
+                            {%endfor%}
+                        
+                        </select>
+                    </p>
+
+                    <p>
+                        <label>Alterar Imagem:</label>
+                        <input type="file" class="form-control-file" name="imagem">
+
+                    </p>
+
+
+                    <br>
+
+                    <div style="width: 60%;" class="modal-footer">
+                        <input type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#excluirLivroModal" value="Excluir">
+                        <input type="submit" class="btn btn-primary" value="Salvar">
+                    </div>
+                
+                </form>
+
+            </div>
+        </div>    
+    </div>    
 </div>
 
 
