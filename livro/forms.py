@@ -2,19 +2,15 @@ from django import forms
 from .models import Livrosdb, Emprestimosdb
 
 CATEGORIA_FILTRO =[
-    ("0", "Todas"),
-    ("1", "Física"),
-    ("2", "Química"),
-    ("3", "Biologia"),
-    ("4", "Matemática"),
-    ("5", "Engenharia"),
-    ("6", "Historia"),
-    ("7", "Geografia"),
-    ("8", "Economia"),
-    ("9", "Sociologia"),
-    ("10", "Artes"),
+    ("0", "Todos"),
+    ("4", "Biografia"),
+    ("5", "Escolar"),
+    ("6", "Engenharia"),
+    ("7", "Economia"),
+    ("8", "Ficcao"),
+    ("9", "Filosofia"),
+    ("10", "Saude"),
     ("11", "Tecnologia"),
-    ("12", "Ficção"),
 ]
 
 DISP_FILTRO = [

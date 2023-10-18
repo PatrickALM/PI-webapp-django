@@ -1,4 +1,5 @@
 from django.db import models
+import datetime 
 
 # Create your models here.
 class Usuariosdb(models.Model):
@@ -7,6 +8,8 @@ class Usuariosdb(models.Model):
     endereco = models.CharField(max_length=100)
     telefone = models.CharField(max_length=30)
     matricula =  models.CharField(max_length=30)
+    data_cadastro = models.DateField(default=datetime.date.today)
+    #email = models.CharField(max_length=30,default=None, null=True)
 
     class Meta:
         verbose_name = 'Usuário'
