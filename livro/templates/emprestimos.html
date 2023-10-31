@@ -14,7 +14,13 @@
         <button type="button" style="max-width: 98%;" class=" shadow btn btn-primary btn-lg mb-4" data-bs-toggle="modal" data-bs-target="#cadastroEmprestimoModal">
             Cadastrar Empréstimo
         </button>
+
+        <!-- Button trigger modal -->
+        <button type="button" style="max-width: 98%;" class=" shadow btn btn-primary btn-lg mb-4" data-bs-toggle="modal" data-bs-target="#cadastroDevolucaoModal">
+            Cadastrar Devolução
+        </button>
         
+        <br>
         
         <!-- Modal  Cadastro de Usuario -->
         <div class="modal fade" id="cadastroEmprestimoModal" tabindex="-1" aria-labelledby="cadastroEmprestimoModalLabel" aria-hidden="true">
@@ -41,7 +47,45 @@
             </div>
         </div>
 
-    </div>
+
+
+
+                <!-- Modal  Cadastro de Usuario -->
+        <div class="modal fade" id="cadastroDevolucaoModal" tabindex="-1" aria-labelledby="cadastroDevolucaoModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="cadastroDevolucaoModalLabel"> Cadastrar Devolução </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>         
+                </div>
+                <div class="modal-body">
+
+                    <form action="{% url 'cadastro_devolucao' %}" method="POST"> {% csrf_token %}
+
+                        <select class ='form-control' name="id_livro_devolver">
+
+                            {% for i in livros_emprestados %}
+                            <option value = "{{ i.id }}"> {{ i }} </option>
+                            {% endfor %}
+
+                        </select>
+
+                        <br>
+
+                        <input type = "submit" class = "btn btn-warning" value = "Devolver">
+
+                    </form>
+
+
+                </div>
+                
+            </div>
+            </div>
+        </div>
+
+
+
+
 
 
     <div class="row justify-content-center">

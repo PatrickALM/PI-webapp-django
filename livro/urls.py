@@ -9,5 +9,6 @@ urlpatterns = [
     path('editar_livro/<int:info>', views.editar_livro, name='editar_livro'),
     path('excluir_livro/<int:info>', views.excluir_livro, name='excluir_livro'),
     path('cadastro_emprestimo/', views.cadastro_emprestimo, name='cadastro_emprestimo'),
+    path('cadastro_devolucao/', views.cadastro_devolucao, name='cadastro_devolucao'),
     ]
 

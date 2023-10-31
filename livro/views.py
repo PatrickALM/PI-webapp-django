@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.utils.datastructures import MultiValueDictKeyError
 from usuarios.models import Funcionariosdb, Usuariosdb
 from livro.models import Livrosdb, Categoriadb , Emprestimosdb
-from .forms import LivroForm, FiltroForm,EmprestimoForm
+from .forms import LivroForm, FiltroForm, EmprestimoForm
 import datetime
 
 def manager(request):
@@ -55,7 +55,7 @@ def livros(request):
                 livros = livros.order_by("-titulo")
             
         contagem = len(livros)
-
+        
 
         
         return render(request, 'livros.html',{'livros':livros, 'form':form, 'filtro':filtro, 'contagem':contagem})
@@ -140,10 +140,17 @@ def emprestimos(request):
         usuario = Funcionariosdb.objects.get(id=request.session['usuario'])
         historico = Emprestimosdb.objects.all()
         form = EmprestimoForm()
-        if request.method == "POST":
-            pass
+        usuarios = Usuariosdb.objects.all()
+        livros_emprestados = Livrosdb.objects.filter(disponibilidade = False)
+        id = Emprestimosdb.objects.all()
+        
+        
+        return render(request, 'emprestimos.html',{'historico':historico,
+                                                   'form':form,
+                                                   'usuarios': usuarios,
+                                                   'livros_emprestados': livros_emprestados,
+                                                   'id' : id})
 
-        return render(request, 'emprestimos.html',{'historico':historico,'form':form})
     else:
         return redirect('/auth/login/?status=2')
     
@@ -169,8 +176,15 @@ def cadastro_emprestimo(request):
     else:
         return redirect('/auth/login/?status=2')
 
-    
 
+
+def cadastro_devolucao(request):
+    id = request.POST.get('id_livro_devolver')
+    livro_devolver = Livrosdb.objects.get(id = id)
+    livro_devolver.disponibilidade = True
+    livro_devolver.save()
+    
+    return redirect('/livro/emprestimos/')
     
 
 def popula_tb_livros(request):
