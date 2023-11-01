@@ -16,9 +16,31 @@
 </div> -->
 <br>
 <div class="container-lg">
+
+    <div  class="row card-previsao">
+      <!-- <div class="col-lg-1 col-1 previsao" style="font-size: x-large;">Clima:</div> -->
+      <div class="col-lg-3 col-3">
+        
+        <p class="previsao"> Cidade: {{ cidade }}</p>
+      
+      </div>
+      <div class="col-lg-3 col-3">
+        <p class="previsao"> Temperatura: {{ temperatura }}</p>
+      
+      </div>
+      <div class="col-lg-3 col-3">
+        <p class="previsao"> {{ previsao }}</p>
+      
+      </div>
+
+      <div class="col-lg-2 col-2 text-center icone">
+        <img src="{{ icone }}">
+      </div>
+    </div>
+
+    <br>
     
     <div class="row">
-     
       <div class="col-lg-3 col-3">
         <div class="cards">
           <table class="card shadow-lg ps-4" style="min-height: 100%;">
@@ -100,11 +122,13 @@
           <span class="d-flex justify-content-start">
             
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" checked="" name="inlineRadioOptions" id="inlineRadio1" onclick= "renderiza_grafico('{% url "relatorio_emprestimos" %}')">
+              <input class="form-check-input" type="radio" checked="" name="inlineRadioOptions" id="inlineRadio1"
+              onclick= "renderiza_grafico('{% url "relatorio_emprestimos" %}')">
               <label class="form-check-label" for="inlineRadio1">Último Ano</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" onclick="filtra_grafico_semestre('{% url "relatorio_emprestimos" %}')">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" 
+              onclick="filtra_grafico_semestre('{% url "relatorio_emprestimos" %}')">
               <label class="form-check-label" for="inlineRadio2">Último Semestre</label>
             </div>
 
@@ -113,8 +137,6 @@
               <option value="1" >Usuários</option>
 
             </select>
-
-           
           </span>
           
           <hr>

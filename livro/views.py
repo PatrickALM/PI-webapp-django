@@ -10,10 +10,14 @@ import datetime
 import json
 import pandas as pd
 import numpy as np
+import requests
 
 def manager(request):
     if request.session.get('usuario'):
-        
+
+        #Chamada API Tempo
+        tempo = requests.get("http://api.weatherapi.com/v1/current.json?key=9b6c526db3b54148a0212335230111&q=Sao Paulo&aqi=no&lang=pt").json()
+
         usuario = Funcionariosdb.objects.get(id=request.session['usuario'])
         emps = Emprestimosdb.objects.all()
         qnt_livros= Livrosdb.objects.all().count()
@@ -34,7 +38,7 @@ def manager(request):
         print(data_rank[0:3])
 
         
-        return render(request, 'main.html',{'qnt_livros':qnt_livros,'qnt_usuarios':qnt_usuarios,'qnt_emps':qnt_emps,'qnt_atrasos':qnt_atrasos, 'ranking': data_rank[0:3], 'range': range(0,3)
+        return render(request, 'main.html',{'qnt_livros':qnt_livros,'qnt_usuarios':qnt_usuarios,'qnt_emps':qnt_emps,'qnt_atrasos':qnt_atrasos, 'ranking': data_rank[0:3], 'range': range(0,3), 'previsao': tempo['current']['condition']['text'], 'icone':tempo['current']['condition']['icon'], 'cidade': tempo['location']['name'], 'temperatura': tempo['current']['temp_c']
                                             })
     else:
         return redirect('/auth/login/?status=2')
@@ -42,6 +46,10 @@ def manager(request):
 
 def livros(request):
     if request.session.get('usuario'):
+
+        # Chamada API Versículo
+        versiculo = requests.get('https://www.abibliadigital.com.br/api/verses/nvi/pv/random').json()
+    
         temp ='0'
         temp_disp = '0'
         temp_order = '0'
@@ -49,8 +57,7 @@ def livros(request):
         form = LivroForm()
         filtro = FiltroForm()
         livros = Livrosdb.objects.all()
-        if request.method == "POST":
-                                   
+        if request.method == "POST": 
             temp = request.POST['categoria']
             temp_disp = request.POST['disponibilidade']
             temp_order = request.POST['order']
@@ -83,7 +90,7 @@ def livros(request):
 
 
         
-        return render(request, 'livros.html',{'livros':livros, 'form':form, 'filtro':filtro, 'contagem':contagem})
+        return render(request, 'livros.html',{'livros':livros, 'form':form, 'filtro':filtro, 'contagem':contagem, 'versiculo': versiculo['text']})
     else:
         return redirect('/auth/login/?status=2')
 
