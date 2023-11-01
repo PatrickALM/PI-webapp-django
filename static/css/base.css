@@ -130,6 +130,23 @@ body {
   }
 
 
-  
+  .versiculo {
+    font-size:large;
+    color: blue;
+  }
+
+  .previsao {
+    padding: 2vw;
+    font-size: large;
+  }
+
+  .icone {
+    padding: 1vw;
+  }
    
+  .card-previsao {
+    background-color: rgb(152, 158, 159);
+    border-radius: 1em;
+    
+  }
   
