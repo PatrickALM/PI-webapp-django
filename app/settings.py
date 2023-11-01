@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-caq%5l*od*arf&gybvhpo1q0sbll4w_u6&up=b(dp!n+g3-oo4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '[::1]']
 
 
 # Application definition
@@ -39,9 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
     'livro',
     'usuarios',
     'common',
+    
 ]
 
 MIDDLEWARE = [
@@ -140,4 +142,7 @@ MESSAGE_TAGS = {
         messages.WARNING: 'alert alert-warning alert-dismissible fade show',
         messages.ERROR: 'alert alert-danger alert-dismissible fade show',
  }
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
 
