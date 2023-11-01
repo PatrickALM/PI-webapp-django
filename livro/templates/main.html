@@ -113,7 +113,7 @@
 
     <br>
     <div class="row">
-      <div class="col-md-8 card shadow-lg ms-2">
+      <div class="col-md-7  card shadow-lg ms-5">
           <span class="d-flex justify-content-start">
             <small class="badge text-dark mt-2">Período:</small>
             <small class="badge text-dark mt-2" style="margin-left: 30%;">Dados:</small>
@@ -141,7 +141,7 @@
           
           <hr>
           
-          <canvas id="grafico" width="250" height="150"></canvas>
+          <canvas id="grafico" width="250" height="200"></canvas>
             
       </div>
 
@@ -159,13 +159,23 @@
                 <th scope="col" class="text-center">Empréstimos</th>
             </tr>
           </thead>
+
+          {% if verifica == False %}
+            <tbody>
+              <tr class="table-active">
+                <th scope="row"></th>
+                <td class="text-center"><strong>Dados Insuficientes</strong> </td>
+                <td class="text-center"></td>
+              </tr>
+            </tbody>
+          {% endif %}
+        
           {% for item in ranking %}
           <tbody>
             <tr>
                 <th scope="row">{{forloop.counter}}</th>
                 <td>{{ item.nome }}</td>
                 <td class="text-center">{{ item.dcount }}</td>
-      
             </tr>
           </tbody>
           {% endfor %}

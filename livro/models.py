@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator, MaxLengthValidator
 import datetime
 from usuarios.models import Usuariosdb,Funcionariosdb
 
@@ -23,13 +23,13 @@ class Livrosdb(models.Model):
     autor = models.CharField(max_length=50)
     disponibilidade = models.BooleanField(default=True)
     img_livro = models.BinaryField(blank=True, null=True, default=None)
-    ISBN = models.CharField(max_length=100)
-    data_cadastro = models.DateField(default=datetime.date.today)
+    ISBN = models.CharField(max_length=13,validators=[MinLengthValidator(13,'Certifique-se de digitar um ISBN válido')])
+    data_cadastro = models.DateField(default=datetime.date.today())
     ano_de_publicacao = models.PositiveIntegerField(default=datetime.date.today().year,
             validators=[
-                MinValueValidator(1900), 
-                MaxValueValidator(datetime.date.today().year)])
-    qntd_total = models.IntegerField(default=1)
+                MinValueValidator(1900,'Certifique-se que o ano de publicação seja maior ou igual a 1900.'), 
+                MaxValueValidator(datetime.date.today().year,'Certifique-se de que o ano de publicação seja uma data válida')])
+    unidades = models.IntegerField(default=1, validators=[MinValueValidator(1,'Certifique-se de que a quantidade de exemplares seja maior ou igual a 1')])
     qntd_emprestado =  models.IntegerField(default=0)
 
     categoria = models.ForeignKey(Categoriadb,on_delete=models.CASCADE)
@@ -54,41 +54,12 @@ class Emprestimosdb(models.Model):
 
     class Meta:
         verbose_name = 'Empréstimo'
+    
+    def __str__(self):
+        return  self.id_usuario.nome + ' ' + self.id_usuario.sobrenome + ' || ' + 'Livro:' + self.id_livro.titulo + ' ||  Retorno:' + self.data_retorno_previsto.strftime("%d/%m/%Y")   + ' ||  Status: ' + self.situacao
 
-    # def __str__(self):
-    #     return self.id_livro + ' - ' + self.id_usuario + ' Entrega: '+ self.situacao
 
 
     
-
-
-'''
-TABELA USUARIO
-
-ID
-NOME
-SOBRENOME
-ENDERECO
-NUMERO
-matriculo
-
-
-TABELA FUNCIONARIO
-ID
-NOME
-SOBRENOME
-EMAIL
-SENHA
-
-TABELA EMPRESTIMO
-ID_EMPRESTIMO
-ID_LIVRO
-ID_USUARIO
-DATA_SAIDA
-DATA_RETORNO
-SITUAÇÃO
-ID_FUNCIONARIO
-
-'''
     
 

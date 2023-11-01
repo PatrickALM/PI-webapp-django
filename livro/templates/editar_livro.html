@@ -54,8 +54,13 @@
                     </p>
 
                     <p>
+                        <label>Unidades:</label>
+                        <input style="width: 60%;" class="form-control" type="text" value="{{livro.unidades}}" name="ISBN">
+                    </p>
+
+                    <p>
                         <label>Categoria:</label>
-                        <select style="width: 20%;" class="form-select" name="categoria">
+                        <select style="width: 20%;" class="form-select selectpicker" name="categoria" data-live-search="true" data-live-search-style="startsWith">
                             {% for i in categorias %}
                                 {% if livro.categoria == i %}
                                     <option selected >{{ i.nome }}</option>

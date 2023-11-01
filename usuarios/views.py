@@ -38,7 +38,7 @@ def usuarios(request):
     if request.session.get('usuario'):
         usuario = Funcionariosdb.objects.get(id=request.session['usuario'])
         form = UsuarioForm
-        dados_usuarios = Usuariosdb.objects.all()
+        dados_usuarios = Usuariosdb.objects.all().order_by('nome')
 
         return render(request, 'usuarios.html',{'form':form,'dados_usuarios':dados_usuarios})
     else:
@@ -54,16 +54,19 @@ def cadastro_usuario(request):
                     nome = form.data['nome'],
                     sobrenome = form.data['sobrenome'],
                     endereco = form.data['endereco'],
+                    email = form.data['email'],
                     telefone = form.data['telefone'],
                     matricula = form.data['matricula']
 
                 )
-                form.save(cadastro)
-                messages.success(request, 'Usuário cadastrado com sucesso.')
-                return redirect('/auth/usuarios/')
-            else:
-                messages.ERROR(request, 'Falha ao cadastrar usuário. Verifique as informações e tente novamente.')
-                return redirect('/auth/usuarios/')
+                try:
+                    form.save(cadastro)
+                    messages.success(request, 'Usuário cadastrado com sucesso.')
+                    return redirect('/auth/usuarios/')
+                except:
+                    for error in form.errors:
+                        messages.error(request, form.errors[error])
+                        return redirect('/auth/usuarios/')
     else:
         return redirect('/auth/login/?status=2')
     
@@ -77,6 +80,7 @@ def editar_usuario(request, info):
             dados_usuario.nome = request.POST['nome']
             dados_usuario.sobrenome = request.POST['sobrenome']
             dados_usuario.endereco = request.POST['endereco']
+            dados_usuario.email = request.POST['email']
             dados_usuario.telefone = request.POST['telefone']
             dados_usuario.matricula = request.POST['matricula']
                    
@@ -85,7 +89,7 @@ def editar_usuario(request, info):
                 messages.success(request, 'Cadastro de usuario editado com sucesso.')
                 return redirect('/auth/usuarios/')
             except:
-                messages.ERROR(request, 'Houve um erro inesperado ao editar o cadastro de usuario')
+                messages.error(request, 'Certifique-se de que as informações são válidas para editar o cadastro de usuário.')
                 return redirect('/auth/usuarios/')
         
         return render(request, 'editar_usuario.html',{'dados_usuario':dados_usuario})
