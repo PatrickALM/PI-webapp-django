@@ -109,6 +109,11 @@ function renderiza_grafico(url){
               },
             }},
     });
+
+    if (select_data == '1'){
+        myChart.options.plugins.title.text = 'Usuários no último ano';
+    }
+
     
     myChart.hide(hide_data);
 })
@@ -121,13 +126,26 @@ function filtra_grafico_semestre(url){
     }).then(function(result){
         return result.json()
     }).then(function(data){
-    myChart.data.labels = myChart.data.labels.slice(6,12);
-    myChart.data.datasets[0].data = myChart.data.datasets[select_data].data.slice(6,12);
-    myChart.options.plugins.title.text = 'Empréstimos no último semestre'
-    myChart.update();
-    console.log(myChart.data.datasets[0].data);
+
+        if ( select_data == 0){
+            myChart.data.labels = data.labels.slice(6,12);
+            myChart.data.datasets[0].data = data.data.slice(6,12);
+            myChart.options.plugins.title.text = 'Empréstimos no último semestre';
+            myChart.update();
+            
+        }
+        if ( select_data == 1){
+            myChart.data.labels = data.labels.slice(6,12);
+            myChart.data.datasets[1].data = data.data_usuario.slice(6,12);
+            myChart.options.plugins.title.text = 'Usuários no último semestre';
+            myChart.update();
+            
+            
+            
+        }
 
     })
+
 }
 
 
@@ -138,23 +156,19 @@ function updateChart(dataset){
     if (dataset.value === '0'){
         select_data = 0
         hide_data = 1
+        myChart.options.plugins.title.text = 'Empréstimos no último ano';
         myChart.show(0);
         myChart.hide(1);
-        console.log('Emprestimos selecionado')
+        
     }
     if (dataset.value === '1'){
         select_data = 1
         hide_data = 0
+        myChart.options.plugins.title.text = 'Usuários no último ano';
         myChart.show(1);
         myChart.hide(0);
-        console.log('Usuarios selecionado')
+
+        
     }
 
-    // if (isDataShown === false){
-    //     myChart.show(dataset.value);
-    // }
-    // if (isDataShown === true){
-    //     myChart.hide(dataset.value);
-
-// }
 }
