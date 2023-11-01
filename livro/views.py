@@ -5,7 +5,7 @@ from django.utils.datastructures import MultiValueDictKeyError
 from usuarios.models import Funcionariosdb, Usuariosdb
 from livro.models import Livrosdb, Categoriadb , Emprestimosdb
 from .forms import LivroForm, FiltroForm,EmprestimoForm, FiltroEmprestimoForm
-from django.db.models import Count 
+from django.db.models import Count
 import datetime
 import json
 import pandas as pd
@@ -98,7 +98,6 @@ def livros(request):
         contagem = livros.count()
         for i in livros:
             total += i.unidades
-
 
         
         return render(request, 'livros.html',{'livros':livros, 'form':form, 'filtro':filtro, 'contagem':contagem, 'total':total})
@@ -245,6 +244,7 @@ def emprestimos(request, atrasos='0'):
             
 
         return render(request, 'emprestimos.html',{'historico':historico,'form':form, 'filtro':filtro})
+
     else:
         return redirect('/auth/login/?status=2')
     
@@ -274,6 +274,16 @@ def cadastro_emprestimo(request):
     else:
         return redirect('/auth/login/?status=2')
 
+
+
+
+def cadastro_devolucao(request):
+    id = request.POST.get('id_livro_devolver')
+    livro_devolver = Livrosdb.objects.get(id = id)
+    livro_devolver.disponibilidade = True
+    livro_devolver.save()
+    
+    return redirect('/livro/emprestimos/')
     
 
 def relatorio_emprestimos(request):
@@ -308,6 +318,7 @@ def relatorio_emprestimos(request):
         
     else:
         return redirect('/auth/login/?status=2')
+
 
 
 def relatorio_categorias(request):
