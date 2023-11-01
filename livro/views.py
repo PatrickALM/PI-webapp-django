@@ -10,18 +10,24 @@ import datetime
 import json
 import pandas as pd
 import numpy as np
+import requests
+
 from app.tasks import update_status_emprestimo
-
-
-
 
 
 def manager(request):
 
     if request.session.get('usuario'):
+
+
+        #Chamada API Tempo
+        tempo = requests.get("http://api.weatherapi.com/v1/current.json?key=9b6c526db3b54148a0212335230111&q=Sao Paulo&aqi=no&lang=pt").json()
+
+
         update_status_emprestimo()
         
         verifica_ranking = True
+
         usuario = Funcionariosdb.objects.get(id=request.session['usuario'])
         emps = Emprestimosdb.objects.all()
         qnt_livros= Livrosdb.objects.all().count()
@@ -47,23 +53,31 @@ def manager(request):
                 data_rank[i]['nome'] = ctx[0].titulo
         else:
             verifica_ranking = False
-
-        
+   
         return render(request, 'main.html',{'qnt_livros':qnt_livros,'qnt_usuarios':qnt_usuarios,'qnt_emps':qnt_emps,'qnt_atrasos':qnt_atrasos, 'ranking': data_rank, 'range': range(0,3),
-                                             'verifica':verifica_ranking,})
+                                             'verifica':verifica_ranking, 'previsao': tempo['current']['condition']['text'], 'icone':tempo['current']['condition']['icon'], 'cidade': tempo['location']['name'], 'temperatura': tempo['current']['temp_c']})
+
     else:
         return redirect('/auth/login/?status=2')
     
 
 def livros(request):
     if request.session.get('usuario'):
+
+
+        # Chamada API Versículo
+        versiculo = requests.get('https://www.abibliadigital.com.br/api/verses/nvi/pv/random').json()
+    
+
         total = 0
+
         temp ='0'
         temp_disp = '0'
         temp_order = '0'
         usuario = Funcionariosdb.objects.get(id=request.session['usuario'])
         form = LivroForm()
         filtro = FiltroForm()
+
         livros = Livrosdb.objects.all().order_by("-data_cadastro","-id")
         if request.method == "POST":
                                    
@@ -100,7 +114,10 @@ def livros(request):
             total += i.unidades
 
         
-        return render(request, 'livros.html',{'livros':livros, 'form':form, 'filtro':filtro, 'contagem':contagem, 'total':total})
+
+
+        return render(request, 'livros.html',{'livros':livros, 'form':form, 'filtro':filtro, 'contagem':contagem, 'total':total, 'versiculo': versiculo['text']})
+
     else:
         return redirect('/auth/login/?status=2')
 
