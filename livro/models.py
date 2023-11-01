@@ -24,7 +24,7 @@ class Livrosdb(models.Model):
     disponibilidade = models.BooleanField(default=True)
     img_livro = models.BinaryField(blank=True, null=True, default=None)
     ISBN = models.CharField(max_length=13,validators=[MinLengthValidator(13,'Certifique-se de digitar um ISBN válido')])
-    data_cadastro = models.DateField(default=datetime.date.today)
+    data_cadastro = models.DateField(default=datetime.date.today())
     ano_de_publicacao = models.PositiveIntegerField(default=datetime.date.today().year,
             validators=[
                 MinValueValidator(1900,'Certifique-se que o ano de publicação seja maior ou igual a 1900.'), 
@@ -54,6 +54,9 @@ class Emprestimosdb(models.Model):
 
     class Meta:
         verbose_name = 'Empréstimo'
+    
+    def __str__(self):
+        return  self.id_usuario.nome + ' ' + self.id_usuario.sobrenome + ' || ' + 'Livro:' + self.id_livro.titulo + ' ||  Retorno:' + self.data_retorno_previsto.strftime("%d/%m/%Y")   + ' ||  Status: ' + self.situacao
 
 
 

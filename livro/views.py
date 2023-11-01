@@ -5,7 +5,7 @@ from django.utils.datastructures import MultiValueDictKeyError
 from usuarios.models import Funcionariosdb, Usuariosdb
 from livro.models import Livrosdb, Categoriadb , Emprestimosdb
 from .forms import LivroForm, FiltroForm,EmprestimoForm, FiltroEmprestimoForm
-from django.db.models import Count
+from django.db.models import Count, Q
 import datetime
 import json
 import pandas as pd
@@ -202,6 +202,8 @@ def emprestimos(request, atrasos='0'):
         form = EmprestimoForm()
         filtro = FiltroEmprestimoForm()
         historico = Emprestimosdb.objects.all().order_by('-id')
+        livros_emprestados = Emprestimosdb.objects.filter(Q(situacao = 'Atrasado') | Q(situacao='Em andamento')).order_by('data_retorno_previsto')
+        
         if atrasos == '1':
             historico = Emprestimosdb.objects.filter(situacao = 'Atrasado').order_by('data_saida')
             filtro = FiltroEmprestimoForm(initial={'situacao': "2", 'order': "1"})
@@ -240,10 +242,12 @@ def emprestimos(request, atrasos='0'):
                 historico = historico.order_by("-data_saida","-id")
             elif temp_order == '1':
                 historico = historico.order_by("data_saida",'id')
+        
+            
             
             
 
-        return render(request, 'emprestimos.html',{'historico':historico,'form':form, 'filtro':filtro})
+        return render(request, 'emprestimos.html',{'historico':historico,'form':form, 'filtro':filtro,'livros_emprestados':livros_emprestados})
 
     else:
         return redirect('/auth/login/?status=2')
@@ -260,6 +264,7 @@ def cadastro_emprestimo(request):
                 emprestimo = Emprestimosdb(
                     id_livro = livro,
                     id_usuario = Usuariosdb.objects.get(id=int(form.data['id_usuario'])),
+                    id_funcionario = usuario,
                     data_retorno_previsto = form.data['data_retorno_previsto'])
                 form.save(emprestimo)
                 livro.qntd_emprestado += 1
@@ -278,12 +283,25 @@ def cadastro_emprestimo(request):
 
 
 def cadastro_devolucao(request):
-    id = request.POST.get('id_livro_devolver')
-    livro_devolver = Livrosdb.objects.get(id = id)
-    livro_devolver.disponibilidade = True
-    livro_devolver.save()
+    if request.session.get('usuario'):
+        id = request.POST.get('id_livro_devolver')
+        registro_emprestimo = Emprestimosdb.objects.get(id = id)
+        print(registro_emprestimo)
+        livro = Livrosdb.objects.get(id=registro_emprestimo.id_livro.id) 
+        registro_emprestimo.situacao = "Concluido"
+        registro_emprestimo.data_retorno = datetime.date.today()
+        livro.qntd_emprestado -= 1
+        if livro.unidades > livro.qntd_emprestado:
+            livro.disponibilidade = True
+        
+        registro_emprestimo.save()
+        livro.save()
+
+        return redirect('/livro/emprestimos/')
+    else:
+        return redirect('/auth/login/?status=2')
     
-    return redirect('/livro/emprestimos/')
+    
     
 
 def relatorio_emprestimos(request):

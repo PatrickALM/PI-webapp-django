@@ -22,7 +22,7 @@
         
         <br>
         
-        <!-- Modal  Cadastro de Usuario -->
+        <!-- Modal  Cadastro de Emprestimos -->
         <div class="modal fade" id="cadastroEmprestimoModal" tabindex="-1" aria-labelledby="cadastroEmprestimoModalLabel" aria-hidden="true">
             <div class="modal-dialog" style="min-width: 75%; min-height: 50%;">
             <div class="modal-content">
@@ -76,29 +76,30 @@
 
 
 
-                <!-- Modal  Cadastro de Usuario -->
+                <!-- Modal  Devolução Livros -->
         <div class="modal fade" id="cadastroDevolucaoModal" tabindex="-1" aria-labelledby="cadastroDevolucaoModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog" style="min-width: 75%; min-height: 50%;">
             <div class="modal-content">
                 <div class="modal-header">
                 <h5 class="modal-title" id="cadastroDevolucaoModalLabel"> Cadastrar Devolução </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>         
                 </div>
-                <div class="modal-body">
+                <div class="modal-body d-flex justify-content-center">
+                    <br>
 
-                    <form action="{% url 'cadastro_devolucao' %}" method="POST"> {% csrf_token %}
+                    <form action="{% url 'cadastro_devolucao' %}" method="POST" style="width:auto;min-width:75%" > {% csrf_token %}
 
-                        <select class ='form-control' name="id_livro_devolver">
-
+                        <select  name="id_livro_devolver" class="form-control border my-4 ms-4 selectpicker" data-live-search="true" data-live-search-style='contains'>
+                            <option value="" data-default disabled selected></option>
                             {% for i in livros_emprestados %}
-                            <option value = "{{ i.id }}"> {{ i }} </option>
+                            <option value = "{{ i.id }}"> {{i}} </option>
                             {% endfor %}
 
                         </select>
 
                         <br>
 
-                        <input type = "submit" class = "btn btn-warning" value = "Devolver">
+                        <input type = "submit" class = "btn btn-warning float-end" value = "Devolver">
 
                     </form>
 
