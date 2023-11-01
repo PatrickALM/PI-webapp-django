@@ -83,7 +83,7 @@
 
             <div class="row mt-2 mb-1">
                 <div class="col-md-4">
-                    <h6 class="mx-0"> Total - {{ contagem }}  Livros </h6>
+                    <h6 class="mx-0"> Exemplares únicos - {{ contagem }}  Livros &emsp;Total - {{total}}   Livros </h6>
                 </div>
                     
                 <div class="col-md-8">
@@ -113,6 +113,7 @@
                     <th scope="col">Autor(a)</th>
                     <th scope="col" class="text-center">ISBN</th>
                     <th scope="col">Ano</th>
+                    <th scope="col" class="text-center">Unidades</th>
                     <th scope="col" class="text-center">Disponibilidade</th>
                     <th scope="col"></th>
                 </tr>
@@ -125,6 +126,7 @@
                     <td>{{livro.autor}}</td>
                     <td class="text-center">{{livro.ISBN}}</td>
                     <td>{{livro.ano_de_publicacao}}</td>
+                    <td class="text-center">{{livro.unidades}}</td>
                     <td class="text-center">{% if livro.disponibilidade == True %}
                         <i class="bi bi-check-lg link-success"></i>
                         {% elif livro.disponibilidade == False%}
@@ -160,6 +162,7 @@
                     <div class="card-body d-flex flex-column align-items-center">
                       <strong class="card-title text-dark border-bottom border-secondary">{{ livro.titulo }}</strong>
                       <p class="card-text"> {{ livro.autor }} - {{ livro.ano_de_publicacao }}</p>
+                      <p class="card-text">Unidades : {{ livro.unidades}}</p>
                       <p class="card-text">{{ livro.categoria }}</p>
                       <div class="mt-auto">
                         {% if livro.disponibilidade == True %}
