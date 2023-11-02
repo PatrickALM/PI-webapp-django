@@ -4,7 +4,7 @@ from django.contrib import messages
 from .models import Funcionariosdb,Usuariosdb
 from common.views import HomeView
 from .forms import UsuarioForm
-#from hashlib import sha256
+
 
 
 def login(request):
@@ -12,17 +12,15 @@ def login(request):
     
     return render(request, HomeView.template_name, {'status': status})
 
-def cadastro(request):
-    return HttpResponse('Função CAdastro')
 
 def valida_login(request):
     email= request.POST.get('login_email')
     senha= request.POST.get('login_senha')
-    #senha = sha256(senha.encode()).hexadigest()
+    
 
     usuario = Funcionariosdb.objects.filter(email=email).filter(senha=senha)
 
-    if len(usuario)==0:
+    if len(email.strip())==0:
         return redirect('/auth/login/?status=1')
     elif len(usuario) > 0:
         request.session['usuario'] = usuario[0].id
