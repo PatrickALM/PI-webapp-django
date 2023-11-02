@@ -10,6 +10,8 @@ situacoes = (
 )
 
 
+
+
 class Categoriadb(models.Model):
     nome = models.CharField(max_length=50)
     descricao = models.TextField(null=True, blank=True)

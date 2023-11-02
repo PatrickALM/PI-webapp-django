@@ -17,10 +17,10 @@ def valida_login(request):
     email= request.POST.get('login_email')
     senha= request.POST.get('login_senha')
     
-
+    
     usuario = Funcionariosdb.objects.filter(email=email).filter(senha=senha)
 
-    if len(email.strip())==0:
+    if len(usuario)==0:
         return redirect('/auth/login/?status=1')
     elif len(usuario) > 0:
         request.session['usuario'] = usuario[0].id

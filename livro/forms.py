@@ -1,21 +1,11 @@
 from django import forms
-from .models import Livrosdb, Emprestimosdb,Usuariosdb
+from .models import Livrosdb, Emprestimosdb,Usuariosdb, Categoriadb
 from django.core.exceptions import ValidationError
 
 
 TUPLA_TODOS = (0,"Todos")
 
-CATEGORIA_FILTRO =[
-    ("0", "Todos"),
-    ("4", "Biografia"),
-    ("5", "Escolar"),
-    ("6", "Engenharia"),
-    ("7", "Economia"),
-    ("8", "Ficcao"),
-    ("9", "Filosofia"),
-    ("10", "Saude"),
-    ("11", "Tecnologia"),
-]
+CATEGORIA_FILTRO = [(0,"Todos"),]
 
 DISP_FILTRO = [
     ("0", "Todos"),
@@ -39,12 +29,10 @@ ORDER_BY = [
     
 ]
 NOME_FILTRO = [(0,"Todos"),]
-for i in Usuariosdb.objects.all():
-    NOME_FILTRO.append((i.id, i.__str__))
 
-# LIVRO_FILTRO = [(0,"Todos"),]
-LIVRO_FILTRO = list(Livrosdb.objects.values_list('id','titulo'))
-LIVRO_FILTRO.insert(0,TUPLA_TODOS)
+
+LIVRO_FILTRO = []
+
 
 
 class LivroForm(forms.ModelForm):
@@ -94,6 +82,8 @@ class EmprestimoForm(forms.ModelForm):
 
 
 class FiltroForm(forms.Form):
+    for i in Categoriadb.objects.all():
+        CATEGORIA_FILTRO.append((i.id, i.nome))
     categoria = forms.ChoiceField(choices=CATEGORIA_FILTRO,widget=forms.Select(attrs={'onchange': 'filtro.submit();'}))
     disponibilidade = forms.ChoiceField(choices=DISP_FILTRO,widget=forms.Select(attrs={'onchange': 'filtro.submit();'}))
     order = forms.ChoiceField(choices=ORDER_BY,widget=forms.Select(attrs={'onchange': 'filtro.submit();'}))
@@ -105,6 +95,12 @@ class FiltroForm(forms.Form):
 
 
 class FiltroEmprestimoForm(forms.Form):
+    LIVRO_FILTRO = list(Livrosdb.objects.values_list('id','titulo'))
+    LIVRO_FILTRO.insert(0,TUPLA_TODOS)
+
+    for i in Usuariosdb.objects.all():
+        NOME_FILTRO.append((i.id, i.__str__))
+
     nome = forms.ChoiceField(choices=NOME_FILTRO,widget=forms.Select(attrs={'onchange': 'filtro.submit();'}))
     livro = forms.ChoiceField(choices=LIVRO_FILTRO,widget=forms.Select(attrs={'onchange': 'filtro.submit();'}))
     situacao = forms.ChoiceField(choices=STATUS_FILTRO,widget=forms.Select(attrs={'onchange': 'filtro.submit();'}))
@@ -114,6 +110,8 @@ class FiltroEmprestimoForm(forms.Form):
         super(FiltroEmprestimoForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-select'
+        
+        
 
         self.fields['nome'].widget.attrs['class'] ="form-control border selectpicker"
         self.fields['nome'].widget.attrs['data-live-search'] = "true"
