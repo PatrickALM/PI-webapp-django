@@ -2,6 +2,7 @@ from django import forms
 from .models import Livrosdb, Emprestimosdb,Usuariosdb
 from django.core.exceptions import ValidationError
 
+
 TUPLA_TODOS = (0,"Todos")
 
 CATEGORIA_FILTRO =[
@@ -41,7 +42,7 @@ NOME_FILTRO = [(0,"Todos"),]
 for i in Usuariosdb.objects.all():
     NOME_FILTRO.append((i.id, i.__str__))
 
-
+# LIVRO_FILTRO = [(0,"Todos"),]
 LIVRO_FILTRO = list(Livrosdb.objects.values_list('id','titulo'))
 LIVRO_FILTRO.insert(0,TUPLA_TODOS)
 
