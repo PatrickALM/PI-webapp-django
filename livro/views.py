@@ -14,6 +14,7 @@ import requests
 
 from app.tasks import update_status_emprestimo
 
+TUPLA_TODOS = (0,"Todos")
 
 def manager(request):
 
@@ -218,19 +219,34 @@ def emprestimos(request, atrasos='0'):
         
         form = EmprestimoForm()
         filtro = FiltroEmprestimoForm()
+        filtro.fields['nome'].choices = [(i.id, i.__str__) for i in Usuariosdb.objects.all()]
+        filtro.fields['nome'].choices.insert(0,TUPLA_TODOS)
+
+        filtro.fields['livro'].choices = [(i.id, i.titulo) for i in Livrosdb.objects.all()]
+        filtro.fields['livro'].choices.insert(0,TUPLA_TODOS)
+
         historico = Emprestimosdb.objects.all().order_by('-id')
         livros_emprestados = Emprestimosdb.objects.filter(Q(situacao = 'Atrasado') | Q(situacao='Em andamento')).order_by('data_retorno_previsto')
         
         if atrasos == '1':
             historico = Emprestimosdb.objects.filter(situacao = 'Atrasado').order_by('data_saida')
-            filtro = FiltroEmprestimoForm(initial={'situacao': "2", 'order': "1"})
+            filtro.fields['situacao'].initial = "2"
+            filtro.fields['order'].initial = "1"
 
         if request.method == "POST":
+            
+            
             temp_nome = request.POST['nome']
             temp_livro = request.POST['livro']
             temp_status = request.POST['situacao']
             temp_order = request.POST['order']
-            filtro = FiltroEmprestimoForm(initial={'nome':temp_nome, 'livro':temp_livro, 'situacao': temp_status ,'order':temp_order})
+
+
+            
+            filtro.fields['nome'].initial = temp_nome
+            filtro.fields['livro'].initial = temp_livro
+            filtro.fields['situacao'].initial = temp_status
+            filtro.fields['order'].initial = temp_order
 
             # FILTRA NOME E LIVRO
 

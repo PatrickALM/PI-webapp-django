@@ -3,8 +3,6 @@ from .models import Livrosdb, Emprestimosdb,Usuariosdb, Categoriadb
 from django.core.exceptions import ValidationError
 
 
-TUPLA_TODOS = (0,"Todos")
-
 CATEGORIA_FILTRO = [(0,"Todos"),]
 
 DISP_FILTRO = [
@@ -28,10 +26,6 @@ ORDER_BY = [
     ("3", "Z-a")
     
 ]
-NOME_FILTRO = [(0,"Todos"),]
-
-
-LIVRO_FILTRO = []
 
 
 
@@ -95,14 +89,10 @@ class FiltroForm(forms.Form):
 
 
 class FiltroEmprestimoForm(forms.Form):
-    LIVRO_FILTRO = list(Livrosdb.objects.values_list('id','titulo'))
-    LIVRO_FILTRO.insert(0,TUPLA_TODOS)
+    
 
-    for i in Usuariosdb.objects.all():
-        NOME_FILTRO.append((i.id, i.__str__))
-
-    nome = forms.ChoiceField(choices=NOME_FILTRO,widget=forms.Select(attrs={'onchange': 'filtro.submit();'}))
-    livro = forms.ChoiceField(choices=LIVRO_FILTRO,widget=forms.Select(attrs={'onchange': 'filtro.submit();'}))
+    nome = forms.ChoiceField(widget=forms.Select(attrs={'onchange': 'filtro.submit();'}))
+    livro = forms.ChoiceField(widget=forms.Select(attrs={'onchange': 'filtro.submit();'}))
     situacao = forms.ChoiceField(choices=STATUS_FILTRO,widget=forms.Select(attrs={'onchange': 'filtro.submit();'}))
     order = forms.ChoiceField(choices=ORDER_BY[0:2],widget=forms.Select(attrs={'onchange': 'filtro.submit();'}))
 
