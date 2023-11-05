@@ -140,6 +140,7 @@ def editar_livro(request, info):
                 livro.disponibilidade = False
             livro.ano_de_publicacao = request.POST['ano_de_publicacao']
             livro.ISBN = request.POST['ISBN']
+            livro.unidades = request.POST['Unidades']
             livro.categoria = Categoriadb.objects.get(nome=request.POST['categoria']) 
 
             if (request.FILES.get('imagem')==None and livro.img != "" ):
