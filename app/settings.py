@@ -14,6 +14,7 @@ from pathlib import Path
 from django.contrib.messages import constants as messages
 import os
 import django_heroku
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -88,16 +89,24 @@ WSGI_APPLICATION = 'app.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-        'default':{
-            'ENGINE':'django.db.backends.postgresql_psycopg2',
-            'NAME':'dab7k70jo4825s',
-            'USER':'qxzckfqdbvepse',
-            'PASSWORD':'081967efba269428637b5b32dd8d1f9d31b86c6540d9edaa93908188759ddbcc',
-            'HOST':'ec2-34-193-110-25.compute-1.amazonaws.com',
-            'PORT':'5432',
-        }
+if 'test' in sys.argv:
+    DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
+}
+else:
+    DATABASES = {
+            'default':{
+                'ENGINE':'django.db.backends.postgresql_psycopg2',
+                'NAME':'dab7k70jo4825s',
+                'USER':'qxzckfqdbvepse',
+                'PASSWORD':'081967efba269428637b5b32dd8d1f9d31b86c6540d9edaa93908188759ddbcc',
+                'HOST':'ec2-34-193-110-25.compute-1.amazonaws.com',
+                'PORT':'5432',
+            }
+        }
 
 
 
